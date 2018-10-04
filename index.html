@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+          <script src="http://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous">
+          </script>
+          <link rel="stylesheet" href="main.css" type="text/css" />
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body class="bg">
+        <p class="title">Search the World!</p>
+        <div class="CountryInfoSec">
+            <p>General Country Information</p>
+            <p>Enter Name of Country: <input type="text" id="searchCountryName"/></p>
+            <button type="submit" id="Search" name="Find">Search</button>
+            <div id="info">
+                
+                <div><span class="subtitle">Population: </span><span id="population"></span></div>
+                <div><span class="subtitle">Language: </span><span id="language"></span></div>
+                <div><span class="subtitle">Capital City: </span><span id="capital"></span></div>
+                <div><span class="subtitle">Currency: </span><span id="currency"></span></div>
+                <div id="countryflag"></div>
+                <ul><span class="subtitle">List of Bordering Countries</span><span id="borderingCountries"></span></ul>
+            </div>
+        </div>
+        <div class="RegionInfoSec">
+            
+        </div>
+        
+    </body>
+    <script>
+    
+        /* global $*/
+        $(document).ready(function(){
+        $("#Search").click(function(e){
+        var searchval = $("#searchCountryName").val();
+        var myurl= "https://restcountries.eu/rest/v2/name/" + searchval;
+        console.log(myurl);
+        $.ajax({
+            url : myurl,
+            crossDomain: true,
+            dataType : "json",
+            success : function(parsed_json) {
+                console.log(parsed_json);
+                var population = parsed_json[0].population;
+                console.log(population);
+                var language = parsed_json[0].languages[0].name;
+                console.log(language);
+                var capital = parsed_json[0].capital;
+                console.log(capital);
+                var currency = parsed_json[0].currencies[0].name;
+                console.log(currency);
+                var borderingCountries = parsed_json[0].borders;
+                var borderlist = "<br />";
+                $.each(borderingCountries, function(i, value){
+                    borderlist += value + "<br />";
+
+                    console.log(borderlist);
+                
+                });
+                var flag = "<img src='";
+                flag += parsed_json[0].flag;
+                flag += "' height='60px' width='90px' />";
+                
+                $("#countryflag").html(flag);
+                $("#borderingCountries").html(borderlist);
+                $("#population").html(population);
+                $("#language").html(language);
+                $("#capital").html(capital);
+                $("#currency").html(currency);
+
+            }
+        });
+        
+        });
+        });
+</script>
+    
+    
+    
+    
+</html>
