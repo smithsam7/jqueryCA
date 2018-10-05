@@ -15,7 +15,6 @@
             <p>Enter Name of Country: <input type="text" id="searchCountryName"/></p>
             <button type="submit" id="Search" name="Find">Search</button>
             <div id="info">
-                
                 <div><span class="subtitle">Population: </span><span id="population"></span></div>
                 <div><span class="subtitle">Language: </span><span id="language"></span></div>
                 <div><span class="subtitle">Capital City: </span><span id="capital"></span></div>
@@ -25,55 +24,70 @@
             </div>
         </div>
         <div class="RegionInfoSec">
-            
+            <form>
+                Enter a Region: <input type="text" id="searchRegion" />
+                <button type="submit" id="search2" name="Region">Search</button>
+                <div><span id="countries"></span></div>
+            </form>
         </div>
-        
     </body>
     <script>
     
         /* global $*/
         $(document).ready(function(){
-        $("#Search").click(function(e){
-        var searchval = $("#searchCountryName").val();
-        var myurl= "https://restcountries.eu/rest/v2/name/" + searchval;
-        console.log(myurl);
-        $.ajax({
-            url : myurl,
-            crossDomain: true,
-            dataType : "json",
-            success : function(parsed_json) {
-                console.log(parsed_json);
-                var population = parsed_json[0].population;
-                console.log(population);
-                var language = parsed_json[0].languages[0].name;
-                console.log(language);
-                var capital = parsed_json[0].capital;
-                console.log(capital);
-                var currency = parsed_json[0].currencies[0].name;
-                console.log(currency);
-                var borderingCountries = parsed_json[0].borders;
-                var borderlist = "<br />";
-                $.each(borderingCountries, function(i, value){
-                    borderlist += value + "<br />";
-
-                    console.log(borderlist);
-                
-                });
-                var flag = "<img src='";
-                flag += parsed_json[0].flag;
-                flag += "' height='60px' width='90px' />";
-                
-                $("#countryflag").html(flag);
-                $("#borderingCountries").html(borderlist);
-                $("#population").html(population);
-                $("#language").html(language);
-                $("#capital").html(capital);
-                $("#currency").html(currency);
-
-            }
-        });
+            $("#Search").click(function(e){
+                var searchval = $("#searchCountryName").val();
+                var myurl= "https://restcountries.eu/rest/v2/name/" + searchval;
+                console.log(myurl);
+                $.ajax({
+                    url : myurl,
+                    crossDomain: true,
+                    dataType : "json",
+                    success : function(parsed_json) {
+                        var population = parsed_json[0].population;
+                        var language = parsed_json[0].languages[0].name;
+                        var capital = parsed_json[0].capital;
+                        var currency = parsed_json[0].currencies[0].name;
+                        var borderingCountries = parsed_json[0].borders;
+                        var borderlist = "<br />";
+                        $.each(borderingCountries, function(i, value){
+                            borderlist += value + "<br />";
+                        });
+                        var flag = "<img src='";
+                        flag += parsed_json[0].flag;
+                        flag += "' height='60px' width='90px' />";
+                        
+                        $("#countryflag").html(flag);
+                        $("#borderingCountries").html(borderlist);
+                        $("#population").html(population);
+                        $("#language").html(language);
+                        $("#capital").html(capital);
+                        $("#currency").html(currency);
         
-        });
+                    }
+                });
+            });
+        
+            $("#search2").click(function(event){
+                event.preventDefault();
+                var searchValue = $("#searchRegion").val();
+                var myurl = "https://restcountries.eu/rest/v2/region/" + searchValue;
+                console.log(myurl);
+                $.ajax({
+                   url : myurl,
+                   crossDomain : true,
+                   dataType : "json",
+                   success : function(parsed_json2) {
+                       console.log(parsed_json2);
+                       var countrylist = parsed_json2;
+                        var countryliststring = "<br />";
+                        $.each(countrylist, function(i, value){
+                            countryliststring += countrylist[i].name + "<br />";
+                        });
+                        $("#countries").html(countryliststring);
+                   }
+                });    
+            });
         });
 </script>
     
